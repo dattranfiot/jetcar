@@ -186,4 +186,4 @@ if __name__ == "__main__":
         button, button_state, axis, axis_val = js.poll()
         if button is not None or axis is not None:
             print(button, button_state, axis, axis_val)
-            time.sleep(0.1)
+            time.sleep(0.01)
