@@ -200,6 +200,9 @@ if __name__ == "__main__":
             if axis is 'left_stick_horz':
                 car.steering = axis_val
 
-            print(button, button_state, axis, axis_val)
+            if axis is 'right_stick_vert':
+                car.throttle = axis_val
+
+            # print(button, button_state, axis, axis_val)
 
         # time.sleep(0.02)
