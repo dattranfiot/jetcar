@@ -3,6 +3,12 @@ import array
 import time
 import struct
 import logging
+from jetracer.nvidia_racecar import NvidiaRacecar
+import time
+
+STEERING_OFFSET = 0.1
+STEERING_GAIN = -0.35
+THROTTLE_GAIN = -0.2
 
 
 class Joystick(object):
@@ -178,12 +184,21 @@ class PS4Joystick(Joystick):
 
 
 if __name__ == "__main__":
-    # Testing the XboxOneJoystickController
+    car = NvidiaRacecar()
+    car.throttle_gain = THROTTLE_GAIN
+    car.steering_offset = STEERING_OFFSET
+    car.steering_gain = STEERING_GAIN
+    car.throttle = 0
+    car.steering = 0
+
     js = PS4Joystick('/dev/input/js0')
     js.init()
 
     while True:
         button, button_state, axis, axis_val = js.poll()
         if button is not None or axis is not None:
+            if axis is 'left_stick_horz':
+                car.steering = axis_val
+
             print(button, button_state, axis, axis_val)
             time.sleep(0.01)
