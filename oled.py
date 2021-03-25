@@ -16,7 +16,7 @@ class OLEDDisplay(object):
         # Placeholder
         self._EMPTY = ''
         # Total number of lines of text
-        self._SLOT_COUNT = 2
+        self._SLOT_COUNT = 4
         self.bus_number = bus_number
         self.slots = [self._EMPTY] * self._SLOT_COUNT
         self.display = None
@@ -77,23 +77,16 @@ class OLEDPart(object):
     The part that updates status on the oled display.
     '''
 
-    def __init__(self, bus_number, auto_record=False):
+    def __init__(self, bus_number=1):
         self.bus_number = bus_number
         self.oled = OLEDDisplay(self.bus_number)
         self.oled.init_display()
         self.on = False
-        if auto_record:
-            self.recording = 'AUTO'
-        else:
-            self.recording = 'NO'
+        self.recording = None
         self.num_records = 0
-        self.user_mode = None
-        eth0 = OLEDPart.get_ip_address('eth0')
+        self.drive_mode = None
         wlan0 = OLEDPart.get_ip_address('wlan0')
-        if eth0 is not None:
-            self.eth0 = 'eth0 : %s' % (eth0)
-        else:
-            self.eth0 = None
+
         if wlan0 is not None:
             self.wlan0 = 'wlan0 : %s' % (wlan0)
         else:
@@ -103,19 +96,19 @@ class OLEDPart(object):
         if not self.on:
             self.on = True
 
-    def run_threaded(self, recording, num_records, user_mode):
+    def run_threaded(self, recording, num_records, drive_mode):
         if num_records is not None and num_records > 0:
             self.num_records = num_records
 
         if recording:
-            self.recording = 'YES (Records = %s)' % (self.num_records)
+            self.recording = 'YES (Records = %s)' % self.num_records
         else:
-            self.recording = 'NO (Records = %s)' % (self.num_records)
+            self.recording = 'NO (Records = %s)' % self.num_records
 
-        self.user_mode = 'User Mode (%s)' % (user_mode)
+        self.drive_mode = 'Drive Mode (%s)' % drive_mode
 
     def update_slots(self):
-        updates = [self.eth0, self.wlan0, self.recording, self.user_mode]
+        updates = [self.wlan0, self.recording, self.drive_mode]
         index = 0
         # Update slots
         for update in updates:
@@ -151,4 +144,5 @@ class OLEDPart(object):
 
 
 if __name__ == "__main__":
-    oled = OLEDPart(1, False)
+    oled = OLEDPart()
+    oled.update()
