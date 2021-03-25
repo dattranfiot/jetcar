@@ -201,4 +201,5 @@ if __name__ == "__main__":
                 car.steering = axis_val
 
             print(button, button_state, axis, axis_val)
-            time.sleep(0.01)
+
+        # time.sleep(0.02)
