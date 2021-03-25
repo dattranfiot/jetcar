@@ -8,7 +8,7 @@ import time
 
 STEERING_OFFSET = 0.1
 STEERING_GAIN = -0.35
-THROTTLE_GAIN = -0.2
+THROTTLE_GAIN = 0.2
 
 
 class Joystick(object):
@@ -202,7 +202,3 @@ if __name__ == "__main__":
 
             if axis is 'right_stick_vert':
                 car.throttle = axis_val
-
-            # print(button, button_state, axis, axis_val)
-
-        # time.sleep(0.02)
