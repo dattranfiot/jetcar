@@ -5,6 +5,7 @@ import struct
 import logging
 from jetracer.nvidia_racecar import NvidiaRacecar
 import time
+from oled import OLEDPart
 
 STEERING_OFFSET = 0.1
 STEERING_GAIN = -0.35
@@ -194,6 +195,8 @@ if __name__ == "__main__":
     js = PS4Joystick('/dev/input/js0')
     js.init()
 
+    ds = OLEDPart()
+    ds.update_slots()
     while True:
         button, button_state, axis, axis_val = js.poll()
         if button is not None or axis is not None:
