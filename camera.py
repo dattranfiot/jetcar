@@ -4,7 +4,14 @@ import numpy as np
 from PIL import Image
 import glob
 from flask import Response, Flask
+from threading import Thread, Lock
 
+
+global video_frame
+video_frame = None
+
+global thread_lock
+thread_lock = Lock()
 
 class CSICamera:
     '''
@@ -59,12 +66,19 @@ class CSICamera:
             self.poll_camera()
 
     def poll_camera(self):
+        global video_frame, thread_lock
         import cv2
         self.ret, frame = self.camera.read()
-        self.frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        if frame is not None:
+            with thread_lock:
+                video_frame = frame.copy()
+
+            self.frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
 
     def run(self):
         self.poll_camera()
+
         return self.frame
 
     def run_threaded(self):
@@ -78,14 +92,25 @@ class CSICamera:
 
 
 def encodeFrame():
+    global thread_lock
+    import cv2
     while True:
+        # Acquire thread_lock to access the global video_frame object
+        with thread_lock:
+            global video_frame
+            if video_frame is None:
+                continue
+            return_key, encoded_image = cv2.imencode(".jpg", video_frame)
+            if not return_key:
+                continue
+
         # Output image as a byte array
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
-               bytearray(self.frame) + b'\r\n')
+               bytearray(encoded_image) + b'\r\n')
+
 
 # Create the Flask object for the application
 app = Flask(__name__)
-
 
 @app.route("/")
 def streamFrames():
@@ -93,13 +118,18 @@ def streamFrames():
 
 
 if __name__ == '__main__':
-    cam = CSICamera()
+    # from jetcam.csi_camera import CSICamera
+
+    # camera = CSICamera(width=224, height=224, capture_width=1080, capture_height=720, capture_fps=30)
+
+    cam = CSICamera(image_w=224, image_h=224, capture_width=1080, capture_height=720)
     # Create a thread and attach the method that captures the image frames, to it
-    process_thread = threading.Thread(target=cam.update)
+    process_thread = Thread(target=cam.update)
     process_thread.daemon = True
 
     # Start the thread
     process_thread.start()
+
 
     # start the Flask Web Application
     # While it can be run on any feasible IP, IP = 0.0.0.0 renders the web app on
