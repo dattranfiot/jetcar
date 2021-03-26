@@ -135,7 +135,9 @@ class OLEDPart(object):
     def get_ip_address(cls, interface):
         if OLEDPart.get_network_interface_state(interface) == 'down':
             return None
-        cmd = "ifconfig %s | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'" % interface
+        cmd = "ifconfig %s | " \
+              "grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | " \
+              "grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'" % interface
         return subprocess.check_output(cmd, shell=True).decode('ascii')[:-1]
 
     @classmethod
