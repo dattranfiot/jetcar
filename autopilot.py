@@ -117,8 +117,8 @@ def drive(tub_path=None, model_path=None, model_type=None):
     types = ['image_array', 'float', 'float', 'str']
     # do we want to store new records into own dir or append to existing
     if tub_path is None:
-        tub_path = '/home/{}/data_train/{}/'.format(getpass.getuser(),
-                                                    datetime.datetime.now().strftime('%y-%m-%d'))
+        tub_path = '/home/{}/datastore/{}/'.format(getpass.getuser(),
+                                                   datetime.datetime.now().strftime('%y-%m-%d'))
 
         if not exists(tub_path):
             makedirs(tub_path)
@@ -136,7 +136,7 @@ def drive(tub_path=None, model_path=None, model_type=None):
             run_condition='recording')
     # start the car
     # VEHICLE
-    DRIVE_LOOP_HZ = 20      # the vehicle loop will pause if faster than this speed.
+    DRIVE_LOOP_HZ = 20  # the vehicle loop will pause if faster than this speed.
     car.start(rate_hz=DRIVE_LOOP_HZ)
 
 
