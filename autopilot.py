@@ -135,10 +135,9 @@ def drive(tub_path=None, model_path=None, model_type=None):
             outputs=["tub/num_records"],
             run_condition='recording')
     # start the car
-    #VEHICLE
+    # VEHICLE
     DRIVE_LOOP_HZ = 20      # the vehicle loop will pause if faster than this speed.
-    MAX_LOOPS = None        # the vehicle loop can abort after this many iterations, when given a positive integer.
-    car.start(rate_hz=DRIVE_LOOP_HZ, max_loop_count=MAX_LOOPS)
+    car.start(rate_hz=DRIVE_LOOP_HZ)
 
 
 if __name__ == '__main__':
