@@ -62,7 +62,18 @@ def drive(tub_path=None, model_path=None, model_type=None):
             threaded=True)
 
     # add controller
-    ctr = PS4JoystickController()
+    # JOYSTICK
+    JOYSTICK_MAX_THROTTLE = 0.7         # this scalar is multiplied with the -1 to 1 throttle value to limit the maximum throttle. This can help if you drop the controller or just don't need the full speed available.
+    JOYSTICK_STEERING_SCALE = 1.0       #some people want a steering that is less sensitve. This scalar is multiplied with the steering -1 to 1. It can be negative to reverse dir.
+    AUTO_RECORD_ON_THROTTLE = False     # if true, we will record whenever throttle is not zero. if false, you must manually toggle recording with some other trigger. Usually circle button on joystick.
+    JOYSTICK_DEADZONE = 0.0             # when non zero, this is the smallest throttle before recording triggered.
+    JOYSTICK_THROTTLE_DIR = -1.0        # use -1.0 to flip forward/backward, use 1.0 to use joystick's natural forward/backward
+    ctr = PS4JoystickController(throttle_dir=JOYSTICK_THROTTLE_DIR,
+                                throttle_scale=JOYSTICK_MAX_THROTTLE,
+                                steering_scale=JOYSTICK_STEERING_SCALE,
+                                auto_record_on_throttle=AUTO_RECORD_ON_THROTTLE)
+
+    ctr.set_deadzone(JOYSTICK_DEADZONE)
     car.add(ctr,
             inputs=['cam/image_array'],
             outputs=['user/angle', 'user/throttle', 'user/mode', 'recording'],
