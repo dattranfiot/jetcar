@@ -326,6 +326,7 @@ class JoystickController(object):
 
             time.sleep(self.poll_delay)
 
+
     def do_nothing(self, param):
         '''assign no action to the given axis
         this is useful to unmap certain axes, for example when swapping sticks

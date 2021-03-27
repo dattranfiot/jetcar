@@ -53,6 +53,7 @@ def drive(tub_path=None, model_path=None, model_type=None):
     # add camera
     inputs = []
     cam = CSICamera(image_w=224, image_h=224,
+                    capture_width=1080, capture_height=720,
                     image_d=3, framerate=30,
                     gstreamer_flip=0)
 
