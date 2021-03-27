@@ -84,7 +84,7 @@ def drive(tub_path=None, model_path=None, model_type=None):
 
     # Drive train setup
     PCA9685_I2C_ADDR = 0x40
-    PCA9685_I2C_BUSNUM = None
+    PCA9685_I2C_BUSNUM = 0x01
     # STEERING
     STEERING_CHANNEL = 0  # channel on the 9685 pwm board 0-15
     STEERING_LEFT_PWM = 475  # pwm value for full left steering
