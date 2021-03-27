@@ -1,4 +1,5 @@
 import time
+import utils
 
 
 class PCA9685:
@@ -6,6 +7,7 @@ class PCA9685:
     PWM motor controler using PCA9685 boards.
     This is used for most RC Cars
     '''
+
     def __init__(self, channel, address=0x40, frequency=60, busnum=None, init_delay=0.1):
 
         self.default_freq = 60
@@ -18,11 +20,12 @@ class PCA9685:
             # replace the get_bus function with our own
             def get_bus():
                 return busnum
+
             I2C.get_default_bus = get_bus
         self.pwm = Adafruit_PCA9685.PCA9685(address=address)
         self.pwm.set_pwm_freq(frequency)
         self.channel = channel
-        time.sleep(init_delay) # "Tamiya TBLE-02" makes a little leap otherwise
+        time.sleep(init_delay)  # "Tamiya TBLE-02" makes a little leap otherwise
 
     def set_pulse(self, pulse):
         try:
@@ -45,12 +48,11 @@ class PWMSteering:
                  controller=None,
                  left_pulse=290,
                  right_pulse=490):
-
         self.controller = controller
         self.left_pulse = left_pulse
         self.right_pulse = right_pulse
-        self.pulse = dk.utils.map_range(0, self.LEFT_ANGLE, self.RIGHT_ANGLE,
-                                        self.left_pulse, self.right_pulse)
+        self.pulse = utils.map_range(0, self.LEFT_ANGLE, self.RIGHT_ANGLE,
+                                     self.left_pulse, self.right_pulse)
         self.running = True
         print('PWM Steering created')
 
@@ -60,9 +62,9 @@ class PWMSteering:
 
     def run_threaded(self, angle):
         # map absolute angle to angle that vehicle can implement.
-        self.pulse = dk.utils.map_range(angle,
-                                        self.LEFT_ANGLE, self.RIGHT_ANGLE,
-                                        self.left_pulse, self.right_pulse)
+        self.pulse = utils.map_range(angle,
+                                     self.LEFT_ANGLE, self.RIGHT_ANGLE,
+                                     self.left_pulse, self.right_pulse)
 
     def run(self, angle):
         self.run_threaded(angle)
@@ -112,11 +114,11 @@ class PWMThrottle:
 
     def run_threaded(self, throttle):
         if throttle > 0:
-            self.pulse = dk.utils.map_range(throttle, 0, self.MAX_THROTTLE,
-                                            self.zero_pulse, self.max_pulse)
+            self.pulse = utils.map_range(throttle, 0, self.MAX_THROTTLE,
+                                         self.zero_pulse, self.max_pulse)
         else:
-            self.pulse = dk.utils.map_range(throttle, self.MIN_THROTTLE, 0,
-                                            self.min_pulse, self.zero_pulse)
+            self.pulse = utils.map_range(throttle, self.MIN_THROTTLE, 0,
+                                         self.min_pulse, self.zero_pulse)
 
     def run(self, throttle):
         self.run_threaded(throttle)

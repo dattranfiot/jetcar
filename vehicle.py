@@ -2,7 +2,7 @@ import time
 import numpy as np
 import logging
 from threading import Thread
-from .memory import Memory
+from memory import Memory
 import traceback
 
 logger = logging.getLogger(__name__)
