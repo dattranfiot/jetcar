@@ -1,5 +1,6 @@
 import time
 
+
 class CSICamera:
     '''
     Camera for Jetson Nano IMX219 based camera
