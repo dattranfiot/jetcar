@@ -60,7 +60,7 @@ class BaseHandler(RequestHandler):
     """ Serves the FPV web page"""
     async def get(self):
         data = {}
-        await self.render("templates/base_fpv.html", **data)
+        await self.render("web_templates/base_fpv.html", **data)
 
 
 class WebFpv(Application):
