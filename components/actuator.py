@@ -1,5 +1,5 @@
 import time
-import utils
+from car import utils
 
 
 class PCA9685:

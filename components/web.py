@@ -22,6 +22,8 @@ import tornado.gen
 import tornado.websocket
 from socket import gethostname
 
+from car import utils
+
 
 class VideoAPI(RequestHandler):
     '''

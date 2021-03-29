@@ -6,7 +6,7 @@ from components.joystick import PS4JoystickController
 from components.tub_v2 import TubWriter
 from components.web import WebFpv
 import getpass
-import vehicle
+from car import vehicle
 import datetime
 
 
