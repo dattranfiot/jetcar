@@ -151,7 +151,7 @@ def drive(tub_path=None, model_path=None, model_type=None):
     # Use the FPV preview, which will show the cropped image output, or the full frame.
     USE_FPV = True
     if USE_FPV:
-        V.add(WebFpv(), inputs=['cam/image_array'], threaded=True)
+        car.add(WebFpv(), inputs=['cam/image_array'], threaded=True)
 
     # start the car
     # VEHICLE
