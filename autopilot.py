@@ -4,6 +4,7 @@ from components.actuator import PCA9685, PWMSteering, PWMThrottle
 from components.camera import CSICamera
 from components.joystick import PS4JoystickController
 from components.tub_v2 import TubWriter
+from components.web import WebFpv
 import getpass
 import vehicle
 import datetime
@@ -146,6 +147,12 @@ def drive(tub_path=None, model_path=None, model_type=None):
             inputs=inputs,
             outputs=["tub/num_records"],
             run_condition='recording')
+
+    # Use the FPV preview, which will show the cropped image output, or the full frame.
+    USE_FPV = True
+    if USE_FPV:
+        V.add(WebFpv(), inputs=['cam/image_array'], threaded=True)
+
     # start the car
     # VEHICLE
     DRIVE_LOOP_HZ = 20  # the vehicle loop will pause if faster than this speed.
